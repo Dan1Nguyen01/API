@@ -1,0 +1,22 @@
+### post
+
+POST http://localhost:8080/users
+Content-Type: application/json
+
+{
+    "userName": "username",
+    "password": "password",
+    "email": "admin@admin.com"
+}
+
+### create 1 more
+POST http://localhost:8080/users
+Content-Type: application/json
+
+{
+    "userName": "admin1",
+    "password": "password",
+    "email": "admin@admin.com"
+}
+### list
+GET http://127.0.0.1:8080/api/users
