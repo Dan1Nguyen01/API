@@ -1,7 +1,14 @@
 require('dotenv').config()
 const express = require('express');
 const mongoose = require('mongoose');
-const userRouter = require('./routes/user-route');
+
+const userRouter = require('./routes/user-route/user-route');
+const albumRouter = require('./routes/album-route/album-route');
+const artistRouter = require('./routes/artist-route/artist-route');
+const collectionRouter = require('./routes/collection-route/collection-route');
+const tastepRouter = require('./routes/tastep-route/tastep-route');
+const playlistRouter = require('./routes/playlist-route/playlist-route');
+const songRouter = require('./routes/song-route/song-route');
 
 const app = express();
 mongoose.connect(process.env.DB_URL, {useNewUrlParser: true})
@@ -20,8 +27,27 @@ app.use((req,res,next) =>{
 
 
 
-//routes
+//FOR ADMIN
+//user
 app.use('/api/users', userRouter);
+
+// album
+app.use('/api/albums',albumRouter);
+
+//artist
+app.use('/api/artists',artistRouter);
+
+//collection
+app.use('/api/collections',collectionRouter);
+
+//taste profile
+app.use('/api/tasteps',tastepRouter);
+
+// //playlist
+app.use('api/playlists',playlistRouter);
+
+//song
+app.use('/api/songs', songRouter);
 
 
 app.listen(process.env.PORT, '0.0.0.0', ()=> {
