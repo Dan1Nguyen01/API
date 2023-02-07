@@ -4,7 +4,7 @@ const {getAllArtist,
     getAnArtist,
     createArtist,
     updateArtist,
-    deleteArtist} = require('../../controllers/admin/artist/artistControlled')
+    deleteArtist} = require('../../controllers/admin/artist/artistController')
 
 //get all
     router.get('/', getAllArtist);

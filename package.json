@@ -11,12 +11,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^5.1.0",
     "dotenv": "^16.0.3",
     "env": "^0.0.2",
     "express": "^4.18.2",
     "mongoose": "^6.9.0"
   },
-  "devDependencies": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Dan1Nguyen01/trove_api.git"

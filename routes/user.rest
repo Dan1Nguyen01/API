@@ -20,3 +20,18 @@ Content-Type: application/json
 }
 ### list
 GET http://127.0.0.1:8080/api/users
+###
+GET  http://127.0.0.1:8080/api/user/login
+
+###
+GET  http://127.0.0.1:8080/api/user/signup
+
+
+###
+POST http://localhost:8080/api/user/signup
+Content-Type: application/json
+
+{
+    "email": "testingSignup",
+    "password": "password"
+}
