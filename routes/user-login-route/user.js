@@ -1,5 +1,4 @@
 const express = require('express');
-
 const {loginUser, signupUser} = require('../../controllers/userController/accountController')
 const router = express.Router();
 //login route

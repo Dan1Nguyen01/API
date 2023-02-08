@@ -2,10 +2,14 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
 const userSchema = new mongoose.Schema({
-    email:{
+    userName: {
         type: String,
         required:true,
         unique:true,
+    },
+    email:{
+        type: String,
+        required:true,
     }, 
     password:{
         type:String,
@@ -25,10 +29,16 @@ const userSchema = new mongoose.Schema({
 
 //static sign up method
 
-userSchema.statics.signup = async function (email, password) {
-    const exists = await this.findOne({ email });
+userSchema.statics.signup = async function (email,userName ,password) {
+    const condition1 = await this.findOne({ userName });
 
-    if(exists){
+    if(condition1){
+        throw Error('User name already in use');
+    }
+
+    const condition2 = await this.findOne({ email });
+
+    if(condition2){
         throw Error('Email already in use');
     }
 
@@ -38,7 +48,7 @@ userSchema.statics.signup = async function (email, password) {
 
     const hash = await bcrypt.hash(password,salt);
 
-    const user = await this.create({ email, password: hash })
+    const user = await this.create({ email,userName, password: hash })
     
     return user;
 

@@ -8,11 +8,11 @@ const loginUser = async (req,res) =>{
 
 const signupUser = async(req,res)=>{
 
-    const {email, password,isAdmin,displayedName} = req.body;
+    const {email,userName, password,isAdmin,displayedName} = req.body;
 
     try{ 
-        const user = await User.signup(email, password);
-        res.status(200).json({email, user});
+        const user = await User.signup(email,userName, password);
+        res.status(200).json({email,userName, user});
     }catch(err){
         res.status(400).json({err:err.message});
     }

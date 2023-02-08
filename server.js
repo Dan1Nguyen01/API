@@ -2,6 +2,7 @@ require('dotenv').config()
 const express = require('express');
 const mongoose = require('mongoose');
 
+//For admin
 const userRouter = require('./routes/user-route/user-route');
 const albumRouter = require('./routes/album-route/album-route');
 const artistRouter = require('./routes/artist-route/artist-route');
@@ -9,10 +10,13 @@ const collectionRouter = require('./routes/collection-route/collection-route');
 const tastepRouter = require('./routes/tastep-route/tastep-route');
 const playlistRouter = require('./routes/playlist-route/playlist-route');
 const songRouter = require('./routes/song-route/song-route');
+
+//For User
 const userlogin = require('./routes/user-login-route/user');
-const { loginUser } = require('./controllers/userController/accountController');
+
 
 const app = express();
+mongoose.set('strictQuery', true);
 mongoose.connect(process.env.DB_URL, {useNewUrlParser: true})
     .then(()=>{
         console.log('Database connected')
@@ -29,7 +33,7 @@ app.use((req,res,next) =>{
 
 
 //FOR USER
-app.use('/api/user', loginUser)
+app.use('/api/user', userlogin)
 
 
 

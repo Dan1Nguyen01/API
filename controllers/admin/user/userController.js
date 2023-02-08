@@ -1,76 +1,80 @@
 const User = require('../../../models/user model/user-model');
-
+const mongoose = require('mongoose')
 //get all users
 const getAllUser = async(req, res)=>{
-    try{
-        const user = await User.find()
-        res.json(user);
-    }catch(err){
-        res.status(500).json({message:err.message})
-    }
+     const users=await User.find({}).sort({createdAt:-1});
+     res.status(200).json(users)
 }
 //get a user
-const getAUser = (req,res)=>{
-    res.json(res.user)
+const getAUser = async (req,res)=>{
+ const {id} = req.params
+ if(!mongoose.Types.ObjectId.isValid(id)){
+  return res.status(404).json({err:'No such user'})
+ }
+ const user  = await User.findById(id);
+
+ if(!user){
+  return res.status(404).json({err: "No such user"});
+ }else{
+  res.status(200).json(user)
+ }
+
+
 }
+
 //create a new user
 const createUser = async (req, res) => {
+    const {email,userName, password, displayedName,isAdmin} = req.body;
+    const user = new User({email, userName,password, displayedName,isAdmin});
     console.log('test', req.body)
-    const user = new User({
-      userName: req.body.userName,
-      password: req.body.password,
-      email:req.body.email,
-      displayedName:req.body?.displayedName,
-      isAdmin:req.body?.isAdmin
-    })
+    const condition1 = await User.findOne({ userName });
+
+    if(condition1){
+       return res.status(400).json({err:'User name already exists'})
+    }
+
+    const condition2 = await User.findOne({ email });
+
+    if(condition2){
+      return res.status(400).json({err:'Email already exists'})
+    }
     try {
-      const newUser = await user.save()
-      res.status(201).json(newUser)
+      await user.save()
+      res.status(201).json(user)
     } catch (err) {
       res.status(400).json({ message: err.message })
     }
   }
-//delete a new user
+//update a new user
 
 const updateUser  = async (req,res)=>{
-    if(req.body.displayedName!= null){
-        res.user.displayedName = req.body.displayedName;
-    }
-
-    if(req.body.password!= null){
-        res.user.password = req.body.password;
-    }
-
-    try{
-        const updatedUser = await res.user.save();
-        res.json(updateUser);
-    }catch(err){
-        res.status(400).json({ message: err.message })
-    }
-}
-//update a user
-const deleteUser =async (req, res) => {
-    try {
-      await res.user.remove()
-      res.json({ message: 'Deleted User' })
-    } catch (err) {
-      res.status(500).json({ message: err.message })
-    }
+  const {id} = req.params;
+  if(!mongoose.Types.ObjectId.isValid(id)){
+    return res.status(404).json({err:'No such user'})
   }
 
-async function getUser(req, res, next) {
-    let user
-    try {
-      user = await User.findById(req.params.id)
-      if (user == null) {
-        return res.status(404).json({ message: 'Cannot find user' })
-      }
-    } catch (err) {
-      return res.status(500).json({ message: err.message })
+  const user  = await User.findOneAndUpdate({_id: id},{
+    ...req.body
+  })
+
+  if(!user){
+    return res.status(404).json({err:'No such user'})
+  }
+  res.status(200).json(user);
+}
+//Delete a user
+const deleteUser =async (req, res) => {
+  const {id} = req.params;
+    if(!mongoose.Types.ObjectId.isValid(id)){
+      return res.status(404).json({err:'No such user'})
     }
-  
-    res.user = user
-    next()
+
+    const user  = await User.findOneAndDelete({_id: id})
+
+    if(!user){
+      return res.status(404).json({err:'No such user'})
+    }
+    res.status(200).json(user);
   }
 
   module.exports = {
